@@ -63,6 +63,41 @@ router.post('/signup', (req, res, next) => {
         next(new Error('Invalid user'))
     }
 
-})
+});
+
+router.post('/login', (req, res, next) => {
+    if(validUser(req.body)) {
+        User
+            .getOneByEmail(req.body.email)
+            .then(user => {
+                console.log('user', user);
+                if(user) {
+                    bcrypt
+                        .compare(req.body.password, user.password)
+                        .then((result) => {
+                            // If the passwords matched
+                            if(result) {
+                                // setting the 'set-cookie header
+                                const isSecure = req.app.get('env') !='development'
+                                res.cookie('user_id', user.id, {
+                                    httpOnly: true,
+                                    secure: isSecure,
+                                    signed: true
+                                })
+                                res.json({
+                                    message: 'Logged in!'
+                                });
+                            } else {
+                                next(new Error('Invalid login3'));
+                            }
+                        });
+                } else {
+                    next(new Error('Invalid login1'));
+                }               
+            });
+    } else {
+        next(new Error('Invalid login2'))
+    }
+});
 
 module.exports = router;
