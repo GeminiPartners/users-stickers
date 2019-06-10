@@ -5,6 +5,8 @@ const Sticker = require('../db/sticker');
 
 router.get('/:id', (req, res) => {
   if (!isNaN(req.params.id)) {
+    res.set('Access-Control-Allow-Origin', 'http://127.0.0.1:8080');
+    res.set('Access-Control-Allow-Credentials', 'true');
     User.getOne(req.params.id).then(user => {
       if (user) {
         delete user.password;
@@ -20,6 +22,9 @@ router.get('/:id', (req, res) => {
 
 router.get('/:id/sticker', (req,res)=>{
   if (!isNaN(req.params.id)) {
+    res.set('Access-Control-Expose-Headers', 'Access-Control-Allow-Origin');
+    res.set('Access-Control-Allow-Origin', 'http://127.0.0.1:8080');
+    res.set('Access-Control-Allow-Credentials', 'true');
     Sticker.getByUser(req.params.id).then(stickers => {
       res.json(stickers);
     });

@@ -78,13 +78,16 @@ router.post('/login', (req, res, next) => {
                             // If the passwords matched
                             if(result) {
                                 // setting the 'set-cookie header
-                                const isSecure = req.app.get('env') !='development'
+                                res.set('Access-Control-Allow-Origin', 'http://127.0.0.1:8080');
+                                res.set('Access-Control-Allow-Credentials', 'true');
+                                const isSecure = req.app.get('env') !='development';
                                 res.cookie('user_id', user.id, {
                                     httpOnly: true,
                                     secure: isSecure,
                                     signed: true
-                                })
+                                });
                                 res.json({
+                                    id: user.id,
                                     message: 'Logged in!'
                                 });
                             } else {
