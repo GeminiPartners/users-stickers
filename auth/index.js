@@ -26,6 +26,8 @@ function validUser(user) {
 
 router.post('/signup', (req, res, next) => {
     if(validUser(req.body)) {
+        res.set('Access-Control-Allow-Origin', 'http://127.0.0.1:8080');
+        res.set('Access-Control-Allow-Credentials', 'true');
         User
             .getOneByEmail(req.body.email)
             .then(user => {
